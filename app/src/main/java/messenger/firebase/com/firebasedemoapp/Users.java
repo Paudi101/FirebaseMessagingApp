@@ -3,6 +3,10 @@ package messenger.firebase.com.firebasedemoapp;
 public class Users {
     public String name,image;
 
+    public Users() {
+
+    }
+
     public Users(String name, String image) {
         this.name = name;
         this.image = image;

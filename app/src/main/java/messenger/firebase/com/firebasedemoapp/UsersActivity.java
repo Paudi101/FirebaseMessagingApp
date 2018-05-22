@@ -1,6 +1,5 @@
 package messenger.firebase.com.firebasedemoapp;
 
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +21,6 @@ public class UsersActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private RecyclerView recycler;
     private DatabaseReference mUserDatabase;
-    private FirebaseRecyclerAdapter<Users, UsersViewHolder> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,7 @@ public class UsersActivity extends AppCompatActivity {
 
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("users")
+                .child("Users")
                 .limitToLast(50);
 
         FirebaseRecyclerOptions<Users> options =
@@ -66,8 +64,6 @@ public class UsersActivity extends AppCompatActivity {
                 return new UsersViewHolder(view);
             }
 
-
-
             @Override
             protected void onBindViewHolder(UsersViewHolder holder, int position, Users model) {
                 // Bind the Chat object to the ChatHolder
@@ -75,6 +71,8 @@ public class UsersActivity extends AppCompatActivity {
                 holder.setName(model.getName());
             }
         };
+
+        adapter.startListening();
 
         recycler.setAdapter(adapter);
     }
@@ -88,6 +86,7 @@ public class UsersActivity extends AppCompatActivity {
         }
 
         public void setName(String name) {
+            System.out.println("LOOK HERE :" + name);
             TextView nameView = (TextView) mView.findViewById(R.id.name_txt);
             nameView.setText(name);
         }
