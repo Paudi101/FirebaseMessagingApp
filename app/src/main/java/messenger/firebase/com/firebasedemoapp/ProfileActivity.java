@@ -70,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         sendBtn.setEnabled(true);
                                         current_state = 1;
+                                        sendBtn.setText("Cancel Friend Request");
                                         Toast.makeText(ProfileActivity.this,"Request Sent ",Toast.LENGTH_LONG);
                                     }
                                 });
@@ -79,7 +80,21 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    //Friends
+                    //Delete request from our DB area
+                    friendReqDatabase.child(currentUser.getUid()).child(userKey).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //Delete request from our their DB area
+                            friendReqDatabase.child(userKey).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sendBtn.setEnabled(true);
+                                    current_state = 0;
+                                    sendBtn.setText("Send Request");
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
