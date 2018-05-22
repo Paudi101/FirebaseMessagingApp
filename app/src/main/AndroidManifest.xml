@@ -19,12 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StartActivity"></activity>
-        <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".UsersActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+        <activity android:name=".StartActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".UsersActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>

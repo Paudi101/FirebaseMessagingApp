@@ -1,5 +1,7 @@
 package messenger.firebase.com.firebasedemoapp;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,16 +66,25 @@ public class UsersActivity extends AppCompatActivity {
                 return new UsersViewHolder(view);
             }
 
+
+
             @Override
             protected void onBindViewHolder(UsersViewHolder holder, int position, Users model) {
                 // Bind the Chat object to the ChatHolder
                 // ...
                 holder.setName(model.getName());
+                final String user_id = getRef(position).getKey();
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(UsersActivity.this,ProfileActivity.class);
+                        intent.putExtra("user_id",user_id);
+                        startActivity(intent);
+                    }
+                });
             }
         };
-
         adapter.startListening();
-
         recycler.setAdapter(adapter);
     }
 
