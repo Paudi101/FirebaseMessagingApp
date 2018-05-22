@@ -27,7 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView displayName;
     private Button sendBtn;
     private Integer current_state;
-    private DatabaseReference mUserDatabase,friendReqDatabase,friendDatabase;
+    private DatabaseReference mUserDatabase, friendReqDatabase, friendDatabase;
     private FirebaseUser currentUser;
 
     @Override
@@ -56,12 +56,12 @@ public class ProfileActivity extends AppCompatActivity {
                 friendReqDatabase.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(userKey)){
+                        if (dataSnapshot.hasChild(userKey)) {
                             String requestType = dataSnapshot.child(userKey).child("request_type").getValue().toString();
-                            if(requestType.equals("received")){
+                            if (requestType.equals("received")) {
                                 current_state = 2;
                                 sendBtn.setText("Accept Request");
-                            }else if (requestType.equals("sent")){
+                            } else if (requestType.equals("sent")) {
                                 current_state = 1;
                                 sendBtn.setText("Cancel Friend Request");
                             }
@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
                             friendDatabase.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.hasChild(userKey)){
+                                    if (dataSnapshot.hasChild(userKey)) {
                                         current_state = 3;
                                         sendBtn.setText("Unfriend");
                                     }
@@ -84,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
                             });
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -102,23 +103,23 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendBtn.setEnabled(false);
-                if(current_state == 0){
+                if (current_state == 0) {
                     //Send Request State
                     friendReqDatabase.child(currentUser.getUid()).child(userKey).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 friendReqDatabase.child(userKey).child(currentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         sendBtn.setEnabled(true);
                                         current_state = 1;
                                         sendBtn.setText("Cancel Friend Request");
-                                        Toast.makeText(ProfileActivity.this,"Request Sent ",Toast.LENGTH_LONG);
+                                        Toast.makeText(ProfileActivity.this, "Request Sent ", Toast.LENGTH_LONG);
                                     }
                                 });
                             } else {
-                                Toast.makeText(ProfileActivity.this,"Request Failed to send ",Toast.LENGTH_LONG);
+                                Toast.makeText(ProfileActivity.this, "Request Failed to send ", Toast.LENGTH_LONG);
                             }
                         }
                     });
@@ -138,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
                             });
                         }
                     });
-                } else if(current_state == 2){
+                } else if (current_state == 2) {
                     //Accept Request state
                     final String currenDate = DateFormat.getDateTimeInstance().format(new Date());
                     friendReqDatabase.child(currentUser.getUid()).child(userKey).setValue(currenDate).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -165,7 +166,7 @@ public class ProfileActivity extends AppCompatActivity {
                                             });
                                         }
                                     });
-                                 }
+                                }
                             });
                         }
                     });
@@ -185,8 +186,22 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
 
-                } else if(current_state == 3){
+                } else if (current_state == 3) {
                     //Already friends
+                    friendDatabase.child(currentUser.getUid()).child(userKey).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //Delete request from our their DB area
+                            friendDatabase.child(userKey).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sendBtn.setEnabled(true);
+                                    current_state = 0;
+                                    sendBtn.setText("Send Request");
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
