@@ -5,8 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,23 +26,25 @@
             android:name=".UsersActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".ProfileActivity"></activity>
-
-
-        <service
-            android:name=".FirebaseMessaginService">
+        <activity android:name=".ProfileActivity">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="messenger.firebase.com.firebasedemoapp" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".FirebaseMessaginService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
 
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
         <!-- [END firebase_iid_service] -->
 
-
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>
