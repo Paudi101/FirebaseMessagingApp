@@ -17,6 +17,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public SectionsPagerAdapter(FragmentManager supportFragmentManager, Context context) {
         super(supportFragmentManager);
         this.context = context;
+        fragments.add(new RequetsFragment());
         fragments.add(new ChatsFragment());
         fragments.add(new FriendsFragment());
     }
@@ -36,8 +37,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0:
-                return "CHATS";
+                return "REQUESTS";
             case 1:
+                return "CHATS";
+            case 2:
                 return "FRIENDS";
             default:
                 return null;
