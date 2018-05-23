@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "437306884638-ivpg0hp6jeu2ucs8rksv6mt7ljm4g9m1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "messenger.firebase.com.firebasedemoapp",
+            "certificate_hash": "a14e33827da73e6bdbe0922b90ae0708f8ce464a"
+          }
+        },
+        {
           "client_id": "437306884638-spgimeplkek12mcth796aj54su6li27a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

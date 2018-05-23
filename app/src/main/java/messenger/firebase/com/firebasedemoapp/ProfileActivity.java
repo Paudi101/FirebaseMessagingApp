@@ -21,13 +21,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView displayName;
     private Button sendBtn;
     private Integer current_state;
-    private DatabaseReference mUserDatabase, friendReqDatabase, friendDatabase;
+    private DatabaseReference mUserDatabase, friendReqDatabase, friendDatabase,notificationDatabase;
     private FirebaseUser currentUser;
 
     @Override
@@ -45,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userKey);
         friendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Requests");
         friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        notificationDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -90,7 +92,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                     }
                 });
-
             }
 
             @Override
@@ -112,6 +113,19 @@ public class ProfileActivity extends AppCompatActivity {
                                 friendReqDatabase.child(userKey).child(currentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+
+                                        //Build notification with hasmap & push to firebase notification db-table
+                                        HashMap<String,String>notificationMap = new HashMap<>();
+                                        notificationMap.put("from",currentUser.getUid());
+                                        notificationMap.put("type","request");
+
+                                        notificationDatabase.child(userKey).push().setValue(notificationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        });
+
                                         sendBtn.setEnabled(true);
                                         current_state = 1;
                                         sendBtn.setText("Cancel Friend Request");
